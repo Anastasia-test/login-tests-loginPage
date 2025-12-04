@@ -1,13 +1,12 @@
 name: Selenium Tests
 
-# События триггера
+# Триггеры для запуска workflow
 on:
   push:
-    branches: [ main ]        # запускать при пуше в main
-  pull_request:               # запускать при PR
+    branches: [ main ]         # при пуше в main
+  pull_request:                # при PR в main
   schedule:
-    - cron: '0 17 * * *'      # ежедневный запуск в 17:00 UTC
-      # Примечание: GitHub Actions использует UTC, 17:00 UTC = 19:00 Киев
+    - cron: '0 17 * * *'       # каждый день в 17:00 UTC (~5 вечера по UTC+0)
 
 jobs:
   selenium-tests:
@@ -24,7 +23,7 @@ jobs:
         with:
           node-version: 18
 
-      # 3. Устанавливаем Google Chrome (для Selenium)
+      # 3. Устанавливаем Google Chrome (обязательно для Selenium)
       - name: Install Google Chrome
         run: |
           sudo apt update
@@ -42,9 +41,9 @@ jobs:
           CHROME_PATH: /usr/bin/google-chrome
         run: node runAll.js
 
-      # 6. Загружаем отчёты как артефакты
+      # 6. Сохраняем отчёты как артефакты
       - name: Upload Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-reports
           path: reports/
