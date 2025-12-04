@@ -1,0 +1,14 @@
+{
+  "name": "selenium-test",
+  "version": "1.0.0",
+  "description": "Selenium JS tests with POM",
+  "main": "runAll.js",
+  "scripts": {
+    "runAll": "node runAll.js"
+  },
+  "dependencies": {
+    "chromedriver": "latest",
+    "puppeteer": "^24.32.0",
+    "selenium-webdriver": "^4.38.0"
+  }
+}
