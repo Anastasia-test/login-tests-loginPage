@@ -1,19 +1,18 @@
-name: Selenium Tests
+name: Run Selenium Tests
 
-# Триггеры для запуска workflow
+# Автозапуск по расписанию + при пуше и PR
 on:
-  push:
-    branches: [ main ]         # при пуше в main
-  pull_request:                # при PR в main
   schedule:
-    - cron: '0 17 * * *'       # каждый день в 17:00 UTC (~5 вечера по UTC+0)
+    - cron: '0 5 * * *' # 05:00 UTC каждый день
+  push:
+  pull_request:
 
 jobs:
   selenium-tests:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Забираем код из репозитория
+      # 1. Забираем репозиторий
       - name: Checkout Code
         uses: actions/checkout@v3
 
@@ -41,7 +40,7 @@ jobs:
           CHROME_PATH: /usr/bin/google-chrome
         run: node runAll.js
 
-      # 6. Сохраняем отчёты как артефакты
+      # 6. Сохраняем отчёты как артефакты (v4)
       - name: Upload Reports
         uses: actions/upload-artifact@v4
         with:
