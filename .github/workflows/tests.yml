@@ -3,24 +3,22 @@ name: Run Selenium Tests
 on:
   push:
   pull_request:
-  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"   # запуск каждый день в 05:00 по Киеву
 
 jobs:
   selenium-tests:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Забираем репозиторий
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Устанавливаем Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # 3. Устанавливаем Google Chrome (обязательно для Selenium)
       - name: Install Google Chrome
         run: |
           sudo apt update
@@ -28,17 +26,14 @@ jobs:
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-      # 4. Устанавливаем зависимости проекта
       - name: Install Dependencies
         run: npm install
 
-      # 5. Запускаем Selenium тесты
       - name: Run Selenium Tests
         env:
           CHROME_PATH: /usr/bin/google-chrome
         run: node runAll.js
 
-      # 6. Сохраняем отчёты как артефакты
       - name: Upload Reports
         uses: actions/upload-artifact@v3
         with:
