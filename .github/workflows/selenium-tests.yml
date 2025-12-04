@@ -1,29 +1,30 @@
-name: Run Selenium Tests Daily
+name: Selenium Tests
 
+# События триггера
 on:
-  # 1) Запуск по расписанию (каждый день в 17:00 по Киеву)
+  push:
+    branches: [ main ]        # запускать при пуше в main
+  pull_request:               # запускать при PR
   schedule:
-    - cron: '0 15 * * *'  # UTC, Киев +2 → 15:00 UTC = 17:00 Киев
-
-  # 2) Ручной запуск через GitHub
-  workflow_dispatch:
+    - cron: '0 17 * * *'      # ежедневный запуск в 17:00 UTC
+      # Примечание: GitHub Actions использует UTC, 17:00 UTC = 19:00 Киев
 
 jobs:
   selenium-tests:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1. Забрать код репозитория
+      # 1. Забираем код из репозитория
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Шаг 2. Установить Node.js
+      # 2. Устанавливаем Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # Шаг 3. Установить Google Chrome (обязательно для Selenium)
+      # 3. Устанавливаем Google Chrome (для Selenium)
       - name: Install Google Chrome
         run: |
           sudo apt update
@@ -31,17 +32,17 @@ jobs:
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-      # Шаг 4. Установить зависимости проекта
+      # 4. Устанавливаем зависимости проекта
       - name: Install Dependencies
         run: npm install
 
-      # Шаг 5. Запустить Selenium-тесты
+      # 5. Запускаем Selenium тесты
       - name: Run Selenium Tests
         env:
           CHROME_PATH: /usr/bin/google-chrome
         run: node runAll.js
 
-      # Шаг 6. Сохранить отчёты как артефакты
+      # 6. Загружаем отчёты как артефакты
       - name: Upload Reports
         uses: actions/upload-artifact@v3
         with:
