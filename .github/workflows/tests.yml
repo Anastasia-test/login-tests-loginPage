@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: "0 3 * * *"   # запуск каждый день в 05:00 по Киеву
+    - cron: "0 3 * * *"
 
 jobs:
   selenium-tests:
@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4   # ⬅️ обновили
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4   # ⬅️ обновили
         with:
           node-version: 18
 
@@ -35,7 +35,7 @@ jobs:
         run: node runAll.js
 
       - name: Upload Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4   # ⬅️ ВОТ ГЛАВНОЕ ИСПРАВЛЕНИЕ
         with:
           name: selenium-reports
           path: reports/
